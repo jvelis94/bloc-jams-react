@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import { Link } from 'react-router-dom';
-import albumData from './../data/albums';
+import albumData from './../data/albums'; //albumData is an arbitrary name. But this is creating an array that hold two objects. Each object defined properties of a specific album, including a sub-array of song objects
 
 class Library extends Component {
 	constructor(props) {
