@@ -16,11 +16,14 @@ class Album extends Component {
        isPlaying: false,
        isHovered: false,
        currentTime: 0,
-       duration: album.songs[0].duration
+       duration: album.songs[0].duration,
+       volume: 0.5,
     };	
 
     this.audioElement = document.createElement('audio');
     this.audioElement.src = album.songs[0].audioSrc;
+    this.audioElement.volume = this.state.volume;
+
 	}
 
 	componentDidMount() {
@@ -90,6 +93,26 @@ class Album extends Component {
      this.audioElement.currentTime = newTime;
      this.setState({ currentTime: newTime });
    }
+
+   handleVolumeChange(e) {
+     const newVolume = e.target.value;
+     this.audioElement.volume = newVolume;
+     this.setState({ volume: newVolume });
+   }
+
+   formatTime(seconds) {
+   	if (isNaN(seconds)) { return "-:--"; }
+    const fullSeconds = Math.floor(seconds);
+    const minutes = Math.floor(fullSeconds / 60);
+    const secondsRemaining = fullSeconds % 60;
+    let output = minutes + ':';
+    if (secondsRemaining < 10) {
+      output += '0';
+    }
+    output += secondsRemaining;
+    return output;
+  }
+
 	
 
 	render() {
@@ -126,7 +149,7 @@ class Album extends Component {
 									</button>
 								</td>
 								<td>{song.title}</td>
-								<td>{song.duration}</td>
+								<td>{this.formatTime(song.duration)}</td>
                     		</tr>
 						)}
 							
@@ -137,10 +160,14 @@ class Album extends Component {
            				currentSong={this.state.currentSong}
            				currentTime={this.audioElement.currentTime}
            				duration={this.audioElement.duration}
+           				volume={this.state.volume}
            				handleSongClick={() => this.handleSongClick(this.state.currentSong)}
            				handlePrevClick={() => this.handlePrevClick()}
            				handleNextClick={() => this.handleNextClick()}
            				handleTimeChange={(e) => this.handleTimeChange(e)}
+           				formatTime={(e) => this.formatTime(e)}
+          				handleVolumeChange={(e) => this.handleVolumeChange(e)}
+          				
            			/>
 			</section>
 );
